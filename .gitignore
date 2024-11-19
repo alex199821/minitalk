@@ -1,0 +1,8 @@
+client
+server
+*.txt
+DS_STORE
+.DS_STORE
+*.out
+.vscode/
+.vscode
