@@ -3,16 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
+/*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:19:55 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 02:35:32 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/20 20:13:37 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <stdio.h>
+
+// cc -o client client.c utils.c
 
 volatile sig_atomic_t	g_server = BUSY;
+
+int is_busy(int busy)
+{
+	static int i;
+	if(busy == 0) 
+		i = 0;
+	else if(busy == 1)
+		i = 1;
+	return (i);
+}
+
+size_t	ft_strlen(const char *c)
+{
+	size_t	i;
+
+	i = 0;
+	while (c[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
 
 void	rec_handler(int signo)
 {
@@ -25,22 +50,52 @@ void	end_handler(int signo)
 	exit(EXIT_SUCCESS);
 }
 
+char	*char_to_bits(unsigned char c)
+{
+	int				i;
+	int				j;
+	unsigned char	bit;
+	char			*bits_ar;
+
+	i = 0;
+	j = 8;
+	bits_ar = (char *)malloc((j + 1) * sizeof(char));
+	if (!bits_ar)
+		return (NULL);
+	while (i < 8)
+	{
+		j--;
+		bit = (c >> j & 1) + '0';
+		bits_ar[i] = bit;
+		i++;
+	}
+	bits_ar[i] = '\0';
+	return (bits_ar);
+}
+
 void	send_char(char c, pid_t server)
 {
-	int	bit;
+	int		i;
+	char	mask;
+	char	*bits_array;
 
-	bit = 0;
-	while (bit < CHAR_BIT)
+	bits_array = char_to_bits(c);
+	if (!bits_array)
+		return ;
+	i = 0;
+	while (bits_array[i])
 	{
-		if (c & (0x80 >> bit))
+		printf("%c", bits_array[i]);
+		if (bits_array[i] == '1')
 			Kill(server, SIGUSR1);
-		else
+		else if (bits_array[i] == '0')
 			Kill(server, SIGUSR2);
-		bit++;
+		i++;
 		while (BUSY == g_server)
 			usleep(42);
 		g_server = BUSY;
 	}
+	free(bits_array);
 }
 
 int	main(int argc, char *argv[])
@@ -67,62 +122,3 @@ int	main(int argc, char *argv[])
 	send_char('\0', server);
 	return (EXIT_SUCCESS);
 }
-
-// volatile sig_atomic_t	g_kingKai = BUSY;
-
-// static void	end_handler(int sig)
-// {
-// 	fputs("\n\t✅ Message received ✅\n", stdout);
-// 	exit(EXIT_SUCCESS);
-// }
-
-// static void	ack_handler(int sig)
-// {
-// 	g_kingKai = READY;
-// }
-
-// static void	send_char(char c, pid_t kingKai)
-// {
-// 	int	bit;
-
-// 	bit = 0;
-// 	while (bit < CHAR_BIT)
-// 	{
-
-// 		if (c & (0x80 >> bit))
-// 			Kill(kingKai, SIGUSR1);
-// 		else
-// 			Kill(kingKai, SIGUSR2);
-// 		bit++;
-
-// 		while (BUSY == g_kingKai)
-// 			usleep(42);
-
-// 		g_kingKai = BUSY;
-// 	}
-// }
-
-// int	main(int ac, char **av)
-// {
-// 	pid_t	kingKai;
-// 	char	*message;
-// 	int		i;
-
-// 	if (ac != 3)
-// 	{
-// 		fputs("Usage: ./client <kingKai> \"message\"\n", stderr);
-// 		return (EXIT_FAILURE);
-// 	}
-// 	kingKai = atoi(av[1]);
-// 	message = av[2];
-
-// 	Signal(SIGUSR1, ack_handler, false);
-// 	Signal(SIGUSR2, end_handler, false);
-
-// 	i = 0;
-// 	while (message[i])
-// 		send_char(message[i++], kingKai);
-// 	send_char('\0', kingKai);
-
-// 	return (EXIT_SUCCESS);
-// }

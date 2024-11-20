@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
+/*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:12:30 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 05:46:49 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/20 18:23:39 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include <stdio.h>
+
+// cc -o server server.c utils.c
 
 char	bits_to_char(char *bits)
 {
@@ -39,15 +41,11 @@ void	handler(int signum, siginfo_t *info, void *more_info)
 		client = info->si_pid;
 	if (SIGUSR1 == signum)
 	{
-		// write(1, "1", 1);
 		bit_str[bit] = '1';
-		// c |= (0b10000000 >> bit);
 	}
 	else if (SIGUSR2 == signum)
 	{
-		// write(1, "0", 1);
 		bit_str[bit] = '0';
-		// c &= ~(0x80 >> bit);
 	}
 	bit++;
 	if (CHAR_BIT == bit)
@@ -57,12 +55,10 @@ void	handler(int signum, siginfo_t *info, void *more_info)
 		{
 			write(STDOUT_FILENO, "\n", 1);
 			Kill(client, SIGUSR2);
-			// c = 0;
 			return ;
 		}
 		c = bits_to_char(bit_str);
 		write(1, &c, 1);
-		// c = 0;
 	}
 	kill(client, SIGUSR1);
 }
