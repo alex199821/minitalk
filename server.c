@@ -6,7 +6,7 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:12:30 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 22:41:43 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/20 23:49:06 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ char	bits_to_char(char *bits)
 
 void	handler(int signum, siginfo_t *info, void *more_info)
 {
-	static char		bit_str[9];
-	static int		bit = 0;
-	static pid_t	client = 0;
-	char			c;
+	static char	bit_str[9];
+	static int	bit = 0;
+	static int	pid_to_send = 0;
+	char		c;
 
 	if (info->si_pid)
-		client = info->si_pid;
+		pid_to_send = info->si_pid;
 	if (SIGUSR1 == signum)
 		bit_str[bit] = '1';
 	else if (SIGUSR2 == signum)
@@ -50,13 +50,13 @@ void	handler(int signum, siginfo_t *info, void *more_info)
 		if (bits_to_char(bit_str) == '\0')
 		{
 			write(STDOUT_FILENO, "\n", 1);
-			send_singal(client, SIGUSR2);
+			send_singal(pid_to_send, SIGUSR2);
 			return ;
 		}
 		c = bits_to_char(bit_str);
 		write(1, &c, 1);
 	}
-	send_singal(client, SIGUSR1);
+	send_singal(pid_to_send, SIGUSR1);
 }
 
 int	main(int ac, char **av)
@@ -69,7 +69,7 @@ int	main(int ac, char **av)
 	printf("Server PID: %d\n", getpid());
 	singal_handle(SIGUSR1, handler, true);
 	singal_handle(SIGUSR2, handler, true);
-	while (1342)
+	while (1)
 		pause();
 	return (EXIT_SUCCESS);
 }

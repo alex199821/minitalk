@@ -6,7 +6,7 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:47:08 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 22:23:14 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/20 23:56:08 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	singal_handle(int signo, void *handler, bool use_siginfo)
 	if (use_siginfo)
 	{
 		sa.sa_flags = SA_SIGINFO;
-		printf("SIGINGO IS: %d\n", SA_SIGINFO);
 		sa.sa_sigaction = handler;
 	}
 	else
