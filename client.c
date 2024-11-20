@@ -6,47 +6,21 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:19:55 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 20:13:37 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/20 22:23:07 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include <stdio.h>
 
-// cc -o client client.c utils.c
-
-volatile sig_atomic_t	g_server = BUSY;
-
-int is_busy(int busy)
+void	rec_handler(void)
 {
-	static int i;
-	if(busy == 0) 
-		i = 0;
-	else if(busy == 1)
-		i = 1;
-	return (i);
+	is_ready(1);
 }
 
-size_t	ft_strlen(const char *c)
+void	end_handler(void)
 {
-	size_t	i;
-
-	i = 0;
-	while (c[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-void	rec_handler(int signo)
-{
-	g_server = READY;
-}
-
-void	end_handler(int signo)
-{
-	write(STDOUT_FILENO, "Ok!", 3);
+	write(STDOUT_FILENO, "Message Recieved\n", 17);
 	exit(EXIT_SUCCESS);
 }
 
@@ -76,7 +50,6 @@ char	*char_to_bits(unsigned char c)
 void	send_char(char c, pid_t server)
 {
 	int		i;
-	char	mask;
 	char	*bits_array;
 
 	bits_array = char_to_bits(c);
@@ -85,18 +58,23 @@ void	send_char(char c, pid_t server)
 	i = 0;
 	while (bits_array[i])
 	{
-		printf("%c", bits_array[i]);
 		if (bits_array[i] == '1')
-			Kill(server, SIGUSR1);
+			send_singal(server, SIGUSR1);
 		else if (bits_array[i] == '0')
-			Kill(server, SIGUSR2);
+			send_singal(server, SIGUSR2);
 		i++;
-		while (BUSY == g_server)
+		while (!is_ready(-1))
 			usleep(42);
-		g_server = BUSY;
+		is_ready(0);
 	}
 	free(bits_array);
 }
+
+// void	leaks(void)
+// {
+// 	system("leaks client");
+// }
+// atexit(leaks);
 
 int	main(int argc, char *argv[])
 {
@@ -111,8 +89,8 @@ int	main(int argc, char *argv[])
 	}
 	server = atoi(argv[1]);
 	message = argv[2];
-	Signal(SIGUSR1, rec_handler, false);
-	Signal(SIGUSR2, end_handler, false);
+	singal_handle(SIGUSR1, rec_handler, false);
+	singal_handle(SIGUSR2, end_handler, false);
 	i = 0;
 	while (message[i])
 	{
