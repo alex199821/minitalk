@@ -6,7 +6,7 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:12:30 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 23:49:06 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:00:20 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int	main(int ac, char **av)
 		return (EXIT_FAILURE);
 	}
 	printf("Server PID: %d\n", getpid());
-	singal_handle(SIGUSR1, handler, true);
-	singal_handle(SIGUSR2, handler, true);
+	singal_configure(SIGUSR1, handler, true);
+	singal_configure(SIGUSR2, handler, true);
 	while (1)
 		pause();
 	return (EXIT_SUCCESS);

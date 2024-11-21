@@ -6,7 +6,7 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:19:55 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 22:23:07 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:02:22 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int	main(int argc, char *argv[])
 	}
 	server = atoi(argv[1]);
 	message = argv[2];
-	singal_handle(SIGUSR1, rec_handler, false);
-	singal_handle(SIGUSR2, end_handler, false);
+	singal_configure(SIGUSR1, rec_handler, false);
+	singal_configure(SIGUSR2, end_handler, false);
 	i = 0;
 	while (message[i])
 	{

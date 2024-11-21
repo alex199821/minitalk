@@ -6,7 +6,7 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:18:35 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 23:57:19 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:01:12 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <unistd.h>
 
 // server.c
-void	singal_handle(int signo, void *handler, bool use_siginfo);
+void	singal_configure(int signo, void *handler, bool use_siginfo);
 void	send_singal(pid_t pid, int signo);
 int		is_ready(int ready);
 size_t	ft_strlen(const char *c);

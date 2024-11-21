@@ -6,29 +6,22 @@
 /*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:47:08 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/20 23:56:08 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:00:10 by auplisas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include <stdio.h>
 
-void	singal_handle(int signo, void *handler, bool use_siginfo)
+void	singal_configure(int signo, void *handler, bool use_siginfo)
 {
 	struct sigaction	sa;
 
-	if (use_siginfo)
-	{
-		sa.sa_flags = SA_SIGINFO;
-		sa.sa_sigaction = handler;
-	}
-	else
-	{
-		sa.sa_handler = handler;
-	}
-	sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_handler = handler;
+	// sigemptyset(&sa.sa_mask);
+	// sigaddset(&sa.sa_mask, SIGUSR1);
+	// sigaddset(&sa.sa_mask, SIGUSR2);
 	if (sigaction(signo, &sa, NULL) < 0)
 	{
 		perror("Sigaction Failed");
@@ -67,3 +60,30 @@ size_t	ft_strlen(const char *c)
 	}
 	return (i);
 }
+
+// void	singal_handle(int signo, void *handler, bool use_siginfo)
+// {
+// 	struct sigaction	sa;
+
+// 	// if (use_siginfo)
+// 	// {
+// 	// 	sa.sa_flags = SA_SIGINFO;
+// 	// 	sa.sa_sigaction = handler;
+// 	// }
+// 	// else
+// 	// {
+// 	// 	sa.sa_handler = handler;
+// 	// }
+// 	sa.sa_flags = SA_SIGINFO;
+// 	// sa.sa_sigaction = handler;
+// 	sa.sa_handler = handler;
+// 	sigemptyset(&sa.sa_mask);
+// 	sigaddset(&sa.sa_mask, SIGUSR1);
+// 	sigaddset(&sa.sa_mask, SIGUSR2);
+// 	printf("- sa_flags: %d\n", sa.sa_flags);
+// 	if (sigaction(signo, &sa, NULL) < 0)
+// 	{
+// 		perror("Sigaction Failed");
+// 		exit(EXIT_FAILURE);
+// 	}
+// }
