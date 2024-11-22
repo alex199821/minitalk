@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:19:55 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/21 01:02:22 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:53:35 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include <stdio.h>
 
-void	rec_handler(void)
+void	send_another_signal_handler(void)
 {
 	is_ready(1);
 }
 
-void	end_handler(void)
+void	message_recieved_handler(void)
 {
 	write(STDOUT_FILENO, "Message Recieved\n", 17);
 	exit(EXIT_SUCCESS);
@@ -87,10 +87,11 @@ int	main(int argc, char *argv[])
 		write(1, "Error\n", 6);
 		exit(EXIT_FAILURE);
 	}
+	ft_printf("Client PID: %d\n", getpid());
 	server = atoi(argv[1]);
 	message = argv[2];
-	singal_configure(SIGUSR1, rec_handler, false);
-	singal_configure(SIGUSR2, end_handler, false);
+	singal_configure(SIGUSR1, send_another_signal_handler);
+	singal_configure(SIGUSR2, message_recieved_handler);
 	i = 0;
 	while (message[i])
 	{

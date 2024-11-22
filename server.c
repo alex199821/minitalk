@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: auplisas <auplisas@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:12:30 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/21 01:00:20 by auplisas         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:44:04 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void	handler(int signum, siginfo_t *info, void *more_info)
 {
 	static char	bit_str[9];
 	static int	bit = 0;
-	static int	pid_to_send = 0;
+	static int	client_pid = 0;
 	char		c;
 
-	if (info->si_pid)
-		pid_to_send = info->si_pid;
+	(void)more_info; 
+	if (info->si_pid) client_pid = info->si_pid;
 	if (SIGUSR1 == signum)
 		bit_str[bit] = '1';
 	else if (SIGUSR2 == signum)
@@ -50,25 +50,26 @@ void	handler(int signum, siginfo_t *info, void *more_info)
 		if (bits_to_char(bit_str) == '\0')
 		{
 			write(STDOUT_FILENO, "\n", 1);
-			send_singal(pid_to_send, SIGUSR2);
+			send_singal(client_pid, SIGUSR2);
 			return ;
 		}
 		c = bits_to_char(bit_str);
 		write(1, &c, 1);
 	}
-	send_singal(pid_to_send, SIGUSR1);
+	send_singal(client_pid, SIGUSR1);
 }
 
-int	main(int ac, char **av)
+int	main(int argc, char *argv[])
 {
-	if (ac != 1)
+	(void)argv;
+	if (argc != 1)
 	{
 		write(1, "Incorrect Number of Arguments\n", 30);
 		return (EXIT_FAILURE);
 	}
-	printf("Server PID: %d\n", getpid());
-	singal_configure(SIGUSR1, handler, true);
-	singal_configure(SIGUSR2, handler, true);
+	ft_printf("Server PID: %d\n", getpid());
+	singal_configure(SIGUSR1, handler);
+	singal_configure(SIGUSR2, handler);
 	while (1)
 		pause();
 	return (EXIT_SUCCESS);
