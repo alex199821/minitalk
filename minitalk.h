@@ -6,7 +6,7 @@
 /*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:18:35 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/22 00:52:28 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/22 01:17:40 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "ft_printf/ft_printf.h"
 
 // server.c
-void	singal_configure(int signo, void *handler);
+void	signal_configure(int signo, void *handler);
 void	send_singal(pid_t pid, int signo);
 int		is_ready(int ready);
 size_t	minitalk_strlen(const char *c);

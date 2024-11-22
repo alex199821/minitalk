@@ -6,7 +6,7 @@
 /*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:19:55 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/22 00:53:35 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/22 01:49:58 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,10 @@ int	main(int argc, char *argv[])
 		write(1, "Error\n", 6);
 		exit(EXIT_FAILURE);
 	}
-	ft_printf("Client PID: %d\n", getpid());
 	server = atoi(argv[1]);
 	message = argv[2];
-	singal_configure(SIGUSR1, send_another_signal_handler);
-	singal_configure(SIGUSR2, message_recieved_handler);
+	signal_configure(SIGUSR1, send_another_signal_handler);
+	signal_configure(SIGUSR2, message_recieved_handler);
 	i = 0;
 	while (message[i])
 	{

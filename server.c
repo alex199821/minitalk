@@ -6,7 +6,7 @@
 /*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:12:30 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/22 00:44:04 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/22 01:55:11 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	ft_printf("Server PID: %d\n", getpid());
-	singal_configure(SIGUSR1, handler);
+	signal_configure(SIGUSR1, handler);
 	singal_configure(SIGUSR2, handler);
 	while (1)
 		pause();

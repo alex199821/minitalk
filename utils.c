@@ -6,14 +6,14 @@
 /*   By: macbook <macbook@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 20:47:08 by auplisas          #+#    #+#             */
-/*   Updated: 2024/11/22 00:52:22 by macbook          ###   ########.fr       */
+/*   Updated: 2024/11/22 01:17:34 by macbook          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include <stdio.h>
 
-void	singal_configure(int signo, void *handler)
+void	signal_configure(int signo, void *handler)
 {
 	struct sigaction	sa;
 
